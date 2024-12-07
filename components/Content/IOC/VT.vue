@@ -26,7 +26,8 @@
           </p>
         </div>
       </div>
-      <a class="text-blue-700 mt-8 underline-offset-1 underline block" :href='originLink'>Original Page Link</a>
+      <a class="text-blue-700 mt-8 underline-offset-1 underline block" :href='originLink' target="_blank">Original Page
+        Link</a>
     </div>
   </div>
 </template>
@@ -40,6 +41,9 @@ export default {
       threatCategories: ["zenpak", "graftor", "dridex"],
       originLink: "https://www.virustotal.com/gui/file/178ba564b39bd07577e974a9b677dfd86ffa1f1d0299dfd958eb883c5ef6c3e1"
     }
+  },
+  methods: {
+
   },
 }
 </script>

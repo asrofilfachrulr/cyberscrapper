@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { shallowRef } from 'vue'
+
 import index from '../components/Content/Index.vue'
 import ioc from '../components/Content/IOC/index.vue'
 import db from '../components/Content/DBreach.vue'
@@ -28,7 +30,7 @@ import te from '../components/Content/TExplorer.vue'
 export default {
   data() {
     return {
-      currentComponent: index
+      currentComponent: shallowRef(index)
     }
   },
   methods: {
@@ -36,16 +38,16 @@ export default {
       console.log(`change menu to ${p}`)
       switch (p) {
         case "ioc":
-          this.currentComponent = ioc
+          this.currentComponent = shallowRef(ioc)
           break
         case "db":
-          this.currentComponent = db
+          this.currentComponent = shallowRef(db)
           break
         case "te":
-          this.currentComponent = te
+          this.currentComponent = shallowRef(te)
           break
         default:
-          this.currentComponent = index
+          this.currentComponent = shallowRef(index)
       }
     }
   }
