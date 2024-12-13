@@ -5,45 +5,54 @@
       <span class="inline ms-4 font-semibold">VirusTotal</span>
     </div>
     <div>
-      <div class="flex flex-nowrap mt-4">
+      <div class="flex flex-nowrap my-8">
         <p class="font-semibold w-96">Community Score</p>
-        <p class="text-red-600">{{ comScore }}</p>
+        <div v-if="data.cs != ''">
+
+          <p class="text-red-600">{{ data.cs }}</p>
+        </div>
       </div>
-      <div class="flex flex-nowrap mt-4">
+      <div class="flex flex-nowrap my-8">
         <p class="font-semibold w-96">Threat Label</p>
-        <p class="text-red-600">{{ threatLabel }}</p>
+        <div v-if="data.lbl != ''">
+
+          <p class="text-red-600">{{ data.lbl }}</p>
+        </div>
       </div>
-      <div class="flex flex-nowrap mt-4 items-center">
+      <div class="flex flex-nowrap my-8 items-center">
         <p class="font-semibold w-96">Family Label</p>
-        <p class="text-red-600 px-3 py-1 rounded-full bg-[#EFAEAE] font-semibold">{{ familyLabel }}</p>
+        <div v-if="data.fl.length > 0" class="flex gap-2">
+
+          <p v-for="x in data.fl" class="text-red-600 px-3 py-1 rounded-full bg-[#EFAEAE] font-semibold">{{
+            x }}</p>
+        </div>
       </div>
-      <div class="flex flex-nowrap mt-4 items-center">
+      <div class="flex flex-nowrap my-8 items-center">
         <p class="font-semibold w-96">Threat Categories</p>
 
-        <div class="flex gap-2">
-          <p v-for="x in threatCategories" class="text-red-600 px-3 py-1 rounded-full bg-[#EFAEAE] font-semibold">{{
-            x }}
+        <div v-if="data.tc.length > 0" class="flex gap-2">
+          <p v-for="x in data.tc" class="text-red-600 px-3 py-1 rounded-full bg-[#EFAEAE] font-semibold">
+            {{
+              x }}
           </p>
         </div>
       </div>
-      <a class="text-blue-700 mt-8 underline-offset-1 underline block" :href='originLink' target="_blank">Original Page
+      <a v-if="data.link != ''" class="text-blue-700 mt-8 underline-offset-1 underline block" :href='data.link'
+        target="_blank">Original Page
         Link</a>
     </div>
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      comScore: "59/72",
-      threatLabel: "trojan.zenpak/graftor",
-      familyLabel: "trojan",
-      threatCategories: ["zenpak", "graftor", "dridex"],
-      originLink: "https://www.virustotal.com/gui/file/178ba564b39bd07577e974a9b677dfd86ffa1f1d0299dfd958eb883c5ef6c3e1"
-    }
-  },
-  methods: {
+import { useIOCStore } from '~/store/ioc'
 
-  },
+export default {
+  computed: {
+    data() {
+      const store = useIOCStore()
+      return store.getData
+    },
+
+  }
 }
 </script>

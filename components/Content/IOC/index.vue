@@ -35,20 +35,35 @@
 </template>
 
 <script>
+import { useIOCStore } from "~/store/ioc"
+
 export default {
   data() {
     return {
-      payload: '',
-      result: ''
+      payload: ''
     }
   },
   methods: {
     async search() {
+      const store = useIOCStore()
+      store.update({ pd: this.payload })
+
       try {
-        const url = `https://www.virustotal.com/gui/file/${this.payload}`
-        const res = await fetch(`/api/vt-scraper?url=${encodeURIComponent(url)}`);
+        const res = await fetch(`/api/ioc?payload=${this.payload}`);
         const json = await res.json();
         console.log(json)
+
+        if (json.success) {
+          const { data } = json
+
+          store.update({
+            cs: data.cs,
+            lbl: data.lbl,
+            fl: data.fl,
+            tc: data.tc,
+            link: data.link
+          })
+        }
       } catch (err) {
         console.log(err)
       }
