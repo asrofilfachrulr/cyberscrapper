@@ -101,6 +101,6 @@ export default {
       const store = useMainStore()
       store.disableMainModal()
     }
-  }
+  },
 }
 </script>

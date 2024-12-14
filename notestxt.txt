@@ -1,12 +1,9 @@
 cyberscraper
 
-TODO:
-- simple news scraper
-
 DONE:
 - loading -> popup modal
 - handle error -> popup modal
 - clear fields upon hit search
 - scrap by IP
 - scrap by Domain
-
+- simple news scraper
