@@ -1,27 +1,35 @@
 export default defineEventHandler(async (event) => {
   const query = getQuery(event); // Get the query parameters
-  const { payload } = query;
+  const { payload, type } = query;
   console.log(`payload to scrape: ${payload}`)
+  console.log(`type to scrape: ${type}`)
 
-  let driver;
+  let data;
 
   try {
-    const data = await vtScraper(payload)
+    switch (type) {
+      case 'ip':
+        data = await vtScraperIP(payload)
+        break;
+      case 'domain':
+        data = await vtScraperDomain(payload)
+        break;
+      default:
+        data = await vtScraperHash(payload)
+    }
+
 
     // Return the scraped data
     return { success: true, data };
   } catch (error) {
     // Handle errors gracefully
     return { success: false, error: error.message };
-  } finally {
-    // Quit the driver
-    if (driver) await driver.quit();
   }
 });
 
 import puppeteer from "puppeteer"
 
-const vtScraper = async function (payload) {
+const vtScraperHash = async function (payload) {
   const url = `https://www.virustotal.com/gui/file/${payload.trim()}`
   console.log(`target url: ${url}\n`)
   const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
@@ -83,4 +91,12 @@ const vtScraper = async function (payload) {
     fl,
     link: url
   };
+}
+
+const vtScraperIP = async function (payload) {
+
+}
+
+const vtScraperDomain = async function (payload) {
+
 }

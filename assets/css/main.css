@@ -3,6 +3,6 @@
 @tailwind utilities;
 @tailwind variants;
 
-body {
-  @apply bg-gray-300;
+:root {
+  @apply !bg-gray-200;
 }

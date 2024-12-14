@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from "daisyui"
+
 export default {
   content: [
     "./components/**/*.{js,vue,ts}",
@@ -7,9 +9,14 @@ export default {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
     "./app.vue"
-  ],  theme: {
+  ], theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    daisyui
+  ],
+  daisyui: {
+    themes: ["light"],
+  },
 }
 

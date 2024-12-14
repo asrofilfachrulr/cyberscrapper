@@ -12,14 +12,12 @@
         <div class="flex">
           <span class="font-semibold pr-8">Type: </span>
           <div class="flex gap-6">
-            <label for="ip-radio-ioc-type"><input type="radio" name="radio-ioc-type"
-                id="ip-radio-ioc-type">&nbsp;IP</label>
-            <label for="domain-radio-ioc-type"><input type="radio" name="radio-ioc-type"
-                id="domain-radio-ioc-type">&nbsp;Domain</label>
-            <label for="sha256-radio-ioc-type"><input type="radio" name="radio-ioc-type"
-                id="sha256-radio-ioc-type">&nbsp;SHA256</label>
-            <label for="md5-radio-ioc-type"><input type="radio" name="radio-ioc-type"
-                id="md5-radio-ioc-type">MD5</label>
+            <label for="sha256-radio-ioc-type"><input v-model="rbType" type="radio" name="radio-ioc-type"
+                id="hash-radio-ioc-type" value="hash" checked>&nbsp;Hash</label>
+            <label for="ip-radio-ioc-type"><input v-model="rbType" type="radio" name="radio-ioc-type"
+                id="ip-radio-ioc-type" value="ip">&nbsp;IP</label>
+            <label for="domain-radio-ioc-type"><input v-model="rbType" type="radio" name="radio-ioc-type"
+                id="domain-radio-ioc-type" value="domain">&nbsp;Domain</label>
           </div>
         </div>
       </div>
@@ -36,20 +34,31 @@
 
 <script>
 import { useIOCStore } from "~/store/ioc"
+import { useMainStore } from "~/store/main"
 
 export default {
   data() {
     return {
+      rbType: 'hash',
       payload: ''
     }
   },
   methods: {
     async search() {
       const store = useIOCStore()
+      store.clear()
       store.update({ pd: this.payload })
 
+      const mainStore = useMainStore()
+
       try {
-        const res = await fetch(`/api/ioc?payload=${this.payload}`);
+        mainStore.updateMainLoadingData({
+          title: 'Loading',
+          msg: 'Scraping security engine website...'
+        })
+        mainStore.enableMainLoading()
+        const res = await fetch(`/api/ioc?payload=${encodeURIComponent(this.payload)}&type=${this.rbType}`);
+        mainStore.disableMainLoading()
         const json = await res.json();
         console.log(json)
 
@@ -63,6 +72,12 @@ export default {
             tc: data.tc,
             link: data.link
           })
+        } else {
+          mainStore.updateMainModalData({
+            title: "Error",
+            msg: "Web Scrapping Failed"
+          })
+          mainStore.enableMainModal()
         }
       } catch (err) {
         console.log(err)

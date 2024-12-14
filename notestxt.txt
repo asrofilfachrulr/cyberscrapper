@@ -1,0 +1,12 @@
+cyberscraper
+
+TODO:
+- scrap by IP
+- scrap by Domain
+
+
+DONE:
+- loading -> popup modal
+- handle error -> popup modal
+- clear fields upon hit search
+
