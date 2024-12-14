@@ -43,15 +43,8 @@ export const useMainStore = defineStore("main", {
     },
 
     updateMainLoadingData({ title, msg }) {
-      console.log(`data loading title: ${title}`)
-      console.log(`data loading msg: ${msg}`)
-
-      console.log(`current mainLoadingData ${JSON.stringify(this.mainLoadingData)}`)
-
       this.mainLoadingData.title = title
       this.mainLoadingData.msg = msg
-
-      console.log(`updated mainLoadingData ${JSON.stringify(this.mainLoadingData)}`)
     },
 
     updateMainModalData({ title, msg }) {

@@ -66,11 +66,15 @@ export default {
           const { data } = json
 
           store.update({
-            cs: data.cs,
-            lbl: data.lbl,
-            fl: data.fl,
-            tc: data.tc,
-            link: data.link
+            cs: data.cs || '',
+            lbl: data.lbl || '',
+            fl: data.fl || '',
+            tc: data.tc || '',
+            as: data.as || '',
+            img: data.img || '',
+            reg: data.reg || '',
+            type: data.type || '',
+            link: data.link || ''
           })
         } else {
           mainStore.updateMainModalData({
