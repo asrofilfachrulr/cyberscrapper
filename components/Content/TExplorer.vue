@@ -38,9 +38,12 @@ export default {
         title: 'Loading',
         msg: 'Scraping security news website...'
       })
+
       mainStore.enableMainLoading()
-      const res = await fetch("http://localhost:8080/scrape-news")
+      const apiEndpoint = `${this.$config.public.apiUrl}/scrape-news`
+      const res = await fetch(apiEndpoint)
       mainStore.disableMainLoading()
+
       const json = await res.json()
       console.log(json)
 
@@ -52,7 +55,7 @@ export default {
       } else {
         mainStore.updateMainModalData({
           title: "Error",
-          msg: "Web Scrapping Failed"
+          msg: error || "Web Scrapping Failed"
         })
         mainStore.enableMainModal()
       }

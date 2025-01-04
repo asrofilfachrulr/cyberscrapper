@@ -56,30 +56,55 @@ export default {
           title: 'Loading',
           msg: 'Scraping security engine website...'
         })
+
         mainStore.enableMainLoading()
-        const res = await fetch(`/api/ioc?payload=${encodeURIComponent(this.payload)}&type=${this.rbType}`);
+        let urlPart
+        switch (this.rbType) {
+          case 'ip':
+            urlPart = 'scrape-ioc-ip?ip'
+            break
+          case 'domain':
+            urlPart = 'scrape-ioc-domain?domain'
+            break
+          default:
+            urlPart = 'scrape-ioc-hash?hash'
+        }
+        let apiEndpoint = `${this.$config.public.apiUrl}/${urlPart}=${encodeURIComponent(this.payload)}`
+        const res = await fetch(apiEndpoint);
         mainStore.disableMainLoading()
+
         const json = await res.json();
         console.log(json)
 
         if (json.success) {
           const { data } = json
+          const { status, result } = data
+          if (status == 'success') {
+            console.log("success to get data")
+            store.update({
+              cs: result.cs || '',
+              lbl: result.lbl || '',
+              fl: result.fl || '',
+              tc: result.tc || '',
+              as: result.as || '',
+              img: result.img || '',
+              reg: result.reg || '',
+              type: data.type || '',
+              link: data.link || ''
+            })
+          } else {
+            console.log("failed to get data")
+            mainStore.updateMainModalData({
+              title: "Error",
+              msg: "Not Found in Security Engine!"
+            })
+            mainStore.enableMainModal()
+          }
 
-          store.update({
-            cs: data.cs || '',
-            lbl: data.lbl || '',
-            fl: data.fl || '',
-            tc: data.tc || '',
-            as: data.as || '',
-            img: data.img || '',
-            reg: data.reg || '',
-            type: data.type || '',
-            link: data.link || ''
-          })
         } else {
           mainStore.updateMainModalData({
             title: "Error",
-            msg: "Web Scrapping Failed"
+            msg: json.error || "Web Scrapping Failed"
           })
           mainStore.enableMainModal()
         }
